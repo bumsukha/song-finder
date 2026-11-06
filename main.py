@@ -34,7 +34,7 @@ def get_track(track_name):
     track = results['tracks']['items'][0]
     return track
 
-st.title("🎧 Song finder check")
+st.title("🎧 Song finder")
 song_detail, Recommendations = st.tabs(["🔍 Song detail", "🔮 Recommendations"])
 
 if st.session_state.get('logged_in', False):
