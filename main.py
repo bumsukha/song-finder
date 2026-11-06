@@ -88,17 +88,24 @@ if track_name:
             st.subheader("Your song :")
             st.write(f"🗣️ {track_artists} - {track['name']}")
             url = "https://open.spotify.com/track/"+str(track['id'])
-            st.markdown('<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/232px-Spotify_icon.svg.png" width=20> '+url,unsafe_allow_html=True)
+            st.markdown('<img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" width=20> '+url,unsafe_allow_html=True)
             yt = st.button('🎞️ Find on Youtube')
             
             if yt:
                 try:
-                    videos_search = VideosSearch(f"{track['name']} - {track_artists}", limit=1)
-                    result = videos_search.result()
-                    video_url = result['result'][0]['link']
-                    st.video(video_url)
-                except:
-                    st.write('Did not find the track on Youtube')
+                    videos_search = VideosSearch(
+                        f"{track['name']} - {track_artists}",
+                        limit=1
+                    )
+                    results = videos_search.result().get("result", [])
+            
+                    if results:
+                        st.video(results[0]["link"])
+                    else:
+                        st.info("검색 결과가 없습니다.")
+            
+                except Exception as e:
+                    st.error(f"YouTube 검색 오류: {type(e).__name__}: {e}")
 
 
             st.info("Spotify 오디오 특성 API 제한으로 특성 그래프를 사용할 수 없습니다.")
