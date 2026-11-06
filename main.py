@@ -32,6 +32,21 @@ except Exception:
 client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
+# 진단 코드 시작
+try:
+    token_info = client_credentials_manager.get_access_token(as_dict=True)
+    st.write("토큰 발급 성공:", bool(token_info.get("access_token")))
+except Exception as e:
+    st.error(f"토큰 발급 실패: {type(e).__name__}: {e}")
+    st.stop()
+
+try:
+    test_result = sp.search(q="APT.", type="track", limit=1)
+    st.write("Spotify 검색 성공:", bool(test_result["tracks"]["items"]))
+except Exception as e:
+    st.error(f"Spotify 검색 실패: {type(e).__name__}: {e}")
+    st.stop()
+
 def get_recommendations(track_name):
     results = sp.search(q=track_name, type='track')
     track_uri = results['tracks']['items'][0]['uri']
