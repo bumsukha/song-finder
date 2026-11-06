@@ -50,7 +50,7 @@ song_detail, Recommendations = st.tabs(["🔍 Song detail", "🔮 Recommendation
 if st.session_state.get('logged_in', False):
     st.sidebar.title(f"Hello, {st.session_state.user['username']}")
     
-track_name = st.sidebar.text_input("🎵 Enter a song name :", value="APT.")
+track_name = st.sidebar.text_input("🎵 Enter a song name :", value="illit pop")
 
 col1, col2, col3 = st.columns(3)
 
