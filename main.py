@@ -17,8 +17,8 @@ st.set_page_config(page_title="RMS",page_icon="🎵",initial_sidebar_state="expa
 conn = sqlite3.connect('./db.db')
 cursor = conn.cursor()
 
-client_id = "7ca31bb821a045fdbddca19677630a0f" 
-client_secret = "b801c09b526e4087a35d59e87b471642"
+client_id = st.secrets["SPOTIFY_CLIENT_ID"]
+client_secret = st.secrets["SPOTIFY_CLIENT_SECRET"]
 client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
