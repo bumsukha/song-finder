@@ -17,8 +17,18 @@ st.set_page_config(page_title="RMS",page_icon="🎵",initial_sidebar_state="expa
 conn = sqlite3.connect('./db.db')
 cursor = conn.cursor()
 
-client_id = st.secrets["SPOTIFY_CLIENT_ID"]
-client_secret = st.secrets["SPOTIFY_CLIENT_SECRET"]
+try:
+    client_id = st.secrets["SPOTIFY_CLIENT_ID"]
+    client_secret = st.secrets["SPOTIFY_CLIENT_SECRET"]
+
+    if not client_id or not client_secret:
+        raise ValueError("Secret is empty")
+
+    st.sidebar.success("Spotify 설정을 읽었습니다.")
+except Exception:
+    st.error("Spotify Secrets 설정을 확인해 주세요.")
+    st.stop()
+
 client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
@@ -133,7 +143,9 @@ if track_name:
         with Recommendations:
             for i, track in enumerate(recommendations):
                 st.image(track['album']['images'][0]['url'], caption=f"{track['artists'][0]['name']} - {track['name']}", width=300)
-    except:
-        st.error("429 Client Error: Too Many Requests")
+    except spotipy.exceptions.SpotifyException as e:
+        st.error(f"Spotify 오류 ({e.http_status}): {e.msg}")
+    except Exception as e:
+        st.error(f"오류: {type(e).__name__}: {e}")
 else:
     st.info("Plaese write the name of the song you'd like to search for")
